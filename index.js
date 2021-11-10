@@ -28,7 +28,6 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
   
     //add A Product
     app.post("/addProducts", async (req, res) => {
-      console.log(req.body);
       const result = await productsCollection.insertOne(req.body);
       res.send(result);
     });
@@ -39,32 +38,36 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
       res.send(result);
     });
   
-    // // single service
-    // app.get("/singleService/:id", async (req, res) => {
-    //   console.log(req.params.id);
-    //   const result = await productsCollection
-    //     .find({ _id: ObjectId(req.params.id) })
-    //     .toArray();
-    //   res.send(result[0]);
-    //   console.log(result);
-    // });
+    // Product Details 
+
+    app.get("/singleProduct/:id", async (req, res) => {
+      const result = await productsCollection
+        .find({ _id: ObjectId(req.params.id) })
+        .toArray();
+      res.send(result[0]);
+    });
   
-    // // insert order and
+    // insert order 
+
+    app.post("/addOrders", async (req, res) => {
+      const result = await ordersCollection.insertOne(req.body);
+      res.send(result);
+    });
+
+    /// all order
+    app.get("/allOrders", async (req, res) => {
+      const result = await ordersCollection.find({}).toArray();
+      res.send(result);
+    });
   
-    // app.post("/addOrders", async (req, res) => {
-    //   const result = await ordersCollection.insertOne(req.body);
-    //   res.send(result);
-    // });
+    //  my order
   
-    // //  my order
-  
-    // app.get("/myOrder/:email", async (req, res) => {
-    //   console.log(req.params.email);
-    //   const result = await ordersCollection
-    //     .find({ email: req.params.email })
-    //     .toArray();
-    //   res.send(result);
-    // });
+    app.get("/myOrder/:email", async (req, res) => {
+      const result = await ordersCollection
+        .find({ email: req.params.email })
+        .toArray();
+      res.send(result);
+    });
   
     // // review
     // app.post("/addSReview", async (req, res) => {
@@ -105,13 +108,6 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
     //     .find({ email: req.params.email })
     //     .toArray();
     //   console.log(result);
-    //   res.send(result);
-    // });
-  
-    // /// all order
-    // app.get("/allOrders", async (req, res) => {
-    //   // console.log("hello");
-    //   const result = await ordersCollection.find({}).toArray();
     //   res.send(result);
     // });
   
