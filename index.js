@@ -69,60 +69,83 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
       res.send(result);
     });
   
-    // // review
-    // app.post("/addSReview", async (req, res) => {
-    //   const result = await reviewCollection.insertOne(req.body);
-    //   res.send(result);
-    // });
+   //Delete Order 
+    
+    app.delete("/delete/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await ordersCollection.deleteOne(query);
+      res.json(result);
+    });
+
+
+   //Delete Product 
+    
+    app.delete("/pdelete/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await productsCollection.deleteOne(query);
+      res.json(result);
+    });
+
+
+    // Add review
+    app.post("/addSReview", async (req, res) => {
+      const result = await reviewCollection.insertOne(req.body);
+      res.send(result);
+    });
   
-    // app.post("/addUserInfo", async (req, res) => {
-    //   console.log("req.body");
-    //   const result = await usersCollection.insertOne(req.body);
-    //   res.send(result);
-    //   console.log(result);
-    // });
-    // //  make admin
+
+    //get review 
+    app.get("/addSReview", async (req, res) => {
+      const result = await reviewCollection
+        .find({})
+        .toArray();
+      res.send(result);
+    });
   
-    // app.put("/makeAdmin", async (req, res) => {
-    //   const filter = { email: req.body.email };
-    //   const result = await usersCollection.find(filter).toArray();
-    //   if (result) {
-    //     const documents = await usersCollection.updateOne(filter, {
-    //       $set: { role: "admin" },
-    //     });
-    //     console.log(documents);
-    //   }
-      // else {
-      //   const role = "admin";
-      //   const result3 = await usersCollection.insertOne(req.body.email, {
-      //     role: role,
-      //   });
-      // }
+
+    //Make user 
+    app.post("/addUserInfo", async (req, res) => {
+      console.log("req.body");
+      const result = await usersCollection.insertOne(req.body);
+      res.send(result);
+      console.log(result);
+    });
+
+
+    //  make admin
   
-      // console.log(result);
-    // });
+    app.put("/makeAdmin", async (req, res) => {
+      const filter = { email: req.body.email };
+      const result = await usersCollection.find(filter).toArray();
+      if (result) {
+        const documents = await usersCollection.updateOne(filter, {
+          $set: { role: "admin" },
+        });
+      }
+    });
   
-    // // check admin or not
-    // app.get("/checkAdmin/:email", async (req, res) => {
-    //   const result = await usersCollection
-    //     .find({ email: req.params.email })
-    //     .toArray();
-    //   console.log(result);
-    //   res.send(result);
-    // });
+    // check admin or not
+    app.get("/checkAdmin/:email", async (req, res) => {
+      const result = await usersCollection
+        .find({ email: req.params.email })
+        .toArray();
+      res.send(result);
+    });
   
-    // // status update
-    // app.put("/statusUpdate/:id", async (req, res) => {
-    //   const filter = { _id: ObjectId(req.params.id) };
-    //   console.log(req.params.id);
-    //   const result = await ordersCollection.updateOne(filter, {
-    //     $set: {
-    //       status: req.body.status,
-    //     },
-    //   });
-    //   res.send(result);
-    //   console.log(result);
-    // });
+    // status update
+    app.put("/statusUpdate/:id", async (req, res) => {
+      const filter = { _id: ObjectId(req.params.id) };
+      console.log(req.params.id);
+      const result = await ordersCollection.updateOne(filter, {
+        $set: {
+          status: req.body.status,
+        },
+      });
+      res.send(result);
+      console.log(result);
+    });
   });
   
   app.listen(process.env.PORT || port);
